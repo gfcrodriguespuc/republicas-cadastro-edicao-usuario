@@ -3,8 +3,6 @@ console.debug("Iniciado");
 // Global Variables
 
 /**@type HTMLInputElement */
-const $formFloatingEmail = document.querySelector("#form-floating-email");
-/**@type HTMLInputElement */
 const $formFloatingPassword = document.querySelector("#form-floating-password");
 /**@type HTMLFormElement */
 const $form = document.querySelector("#form");
@@ -49,10 +47,10 @@ function formFloatingPasswordListener(event) {
   }
 }
 
-function formSubmitListener(event) {
+async function formSubmitListener(event) {
   event.preventDefault();
   const valid = $form.checkValidity();
-  console.debug(valid);
+  console.debug("form is valid:", valid);
   $form.classList.add("was-validated");
   if (!valid) {
     $form.reportValidity();
@@ -61,8 +59,26 @@ function formSubmitListener(event) {
 
   // Form válido, tenta cadastra o usuario
   try {
-    const email = $formFloatingEmail.value;
-    registerUser(email, $formFloatingPassword.value);
+    const profilePictureBase64 = await blobToBase64(
+      await resizeImage($form.elements.profile_picture.files[0])
+    );
+    const email = $form.elements.email.value;
+    const name = $form.elements.name.value;
+    const lastName = $form.elements.last_name.value;
+    const phone = $form.elements.phone.value;
+    const gender = $form.elements.gender.value;
+    const password = $form.elements.password.value;
+    console.debug({
+      email,
+      password,
+      profilePictureBase64,
+      name,
+      lastName,
+      phone,
+      gender,
+    });
+
+    registerUser(email, password, profilePictureBase64, name, lastName, phone, gender);
   } catch (error) {
     console.debug(error);
     showAlert(undefined, error.message, "error");
@@ -93,22 +109,11 @@ async function formProfilePictureListener(event) {
   /**@type {HTMLInputElement} */
   const $fileInput = event.target;
   const profilePictureFile = $fileInput.files[0];
-  console.debug(profilePictureFile);
-
   const resizedProfilePicture = await resizeImage(profilePictureFile);
-  console.debug(resizedProfilePicture);
-
-  console.debug(
-    formatBytes(profilePictureFile.size),
-    "->",
-    formatBytes(resizedProfilePicture.size)
-  );
 
   /**@type {HTMLImageElement} */
   const $imgProfilePicture = document.querySelector("#form-profile-picture-img");
   $imgProfilePicture.src = URL.createObjectURL(resizedProfilePicture);
-
-  console.debug(await blobToBase64(resizedProfilePicture));
 }
 
 /**
@@ -122,13 +127,9 @@ function resizeImage(pictureFile) {
   return new Promise((resolve, reject) => {
     const img = document.createElement("img");
     img.onload = () => {
-      console.debug(img);
-
       // Calcular scale da imagem
-      // const MAX_WIDTH = 300;
-      // const MAX_HEIGHT = 300;
-      const MAX_WIDTH = 130;
-      const MAX_HEIGHT = MAX_WIDTH;
+      const MAX_WIDTH = 130; // comprimento maximo em px
+      const MAX_HEIGHT = 130; // altura maxima em px
 
       let width = img.width;
       let height = img.height;
@@ -145,9 +146,6 @@ function resizeImage(pictureFile) {
         }
       }
 
-      console.debug("inicio:", img.width, img.height);
-      console.debug("fim:", width, height);
-
       // Dynamically create a canvas element
       const canvas = document.createElement("canvas");
       canvas.width = width;
@@ -160,6 +158,9 @@ function resizeImage(pictureFile) {
       ctx.drawImage(img, 0, 0, width, height);
 
       canvas.toBlob((blob) => {
+        console.debug(`Resize: ${formatBytes(pictureFile.size)} -> ${formatBytes(blob.size)}`);
+        console.debug(`Resize: ${img.width}x${img.height} -> ${width}x${height}`);
+
         resolve(blob);
       }, pictureFile.type);
     };
@@ -196,7 +197,12 @@ function formatBytes(bytes, decimals = 2) {
 $formFloatingPassword.addEventListener("change", formFloatingPasswordListener);
 $formFloatingPassword.addEventListener("input", formFloatingPasswordListener);
 $form.addEventListener("submit", formSubmitListener);
-$form.elements["form-profile-picture"].addEventListener("change", formProfilePictureListener);
+$form.elements.profile_picture.addEventListener("change", formProfilePictureListener);
 
 // Actions
+
+// Clear form. Garante que sempre que abra a página o form não está preenchido
+$form.elements.profile_picture.value = "";
+$form.reset();
+
 redirectIfLoggedUser();

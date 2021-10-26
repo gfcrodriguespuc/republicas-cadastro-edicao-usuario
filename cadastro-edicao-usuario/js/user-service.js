@@ -56,10 +56,15 @@ function checkLoggedUser() {
 
 /**
  *
- * @param {String} email
- * @param {String} password
+ * @param {string} email
+ * @param {string} password
+ * @param {string} profilePictureBase64
+ * @param {string} name
+ * @param {string} lastName
+ * @param {string} phone
+ * @param {string} gender
  */
-function registerUser(email, password) {
+function registerUser(email, password, profilePictureBase64, name, lastName, phone, gender) {
   console.debug(email, password);
   if (checkIfUserAlreadyRegistered(email)) {
     throw new Error("Já exite um usuário no sistema usando o e-mail informado.");
@@ -77,7 +82,12 @@ function registerUser(email, password) {
 
   const newUser = {
     email: email.trim(),
-    password: password,
+    password,
+    profilePictureBase64,
+    name,
+    lastName,
+    phone,
+    gender,
   };
   usersDB.push(newUser);
   localStorage.setItem("users", JSON.stringify(usersDB));

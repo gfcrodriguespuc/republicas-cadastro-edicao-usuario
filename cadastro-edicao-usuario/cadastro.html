@@ -29,8 +29,8 @@
                   class="d-none"
                   accept="image/*"
                   type="file"
+                  name="profile_picture"
                   id="form-profile-picture"
-                  name="form-profile-picture"
                   required
                 />
                 <label for="form-profile-picture" class="d-block profile-picture-label">
@@ -50,6 +50,7 @@
                   type="email"
                   class="form-control"
                   id="form-floating-email"
+                  name="email"
                   placeholder="nome@email.com"
                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
                   inputmode="email"
@@ -62,12 +63,18 @@
 
               <div class="mb-3">
                 <label class="form-label" for="form-name">Nome</label>
-                <input class="form-control" type="text" id="form-name" required />
+                <input class="form-control" type="text" id="form-name" name="name" required />
               </div>
 
               <div class="mb-3">
                 <label class="form-label" for="form-last-name">Sobrenome</label>
-                <input class="form-control" type="text" id="form-last-name" required />
+                <input
+                  class="form-control"
+                  type="text"
+                  id="form-last-name"
+                  name="last_name"
+                  required
+                />
               </div>
 
               <div class="mb-3">
@@ -77,6 +84,7 @@
                   type="tel"
                   inputmode="numeric"
                   id="form-phone"
+                  name="phone"
                   required
                 />
               </div>
@@ -91,7 +99,7 @@
                       type="radio"
                       id="form-gender-masculine"
                       name="gender"
-                      value="Masculino"
+                      value="masculine"
                       required
                     />
                     <label class="form-check-label" for="form-gender-masculine">Masculino</label>
@@ -103,7 +111,7 @@
                       type="radio"
                       id="form-gender-feminine"
                       name="gender"
-                      value="Feminino"
+                      value="feminine"
                       required
                     />
                     <label class="form-check-label" for="form-gender-feminine">Feminino</label>
@@ -115,7 +123,7 @@
                       type="radio"
                       id="form-gender-prefer-not-to-inform"
                       name="gender"
-                      value="Prefiro não informar"
+                      value="prefer_not_to_inform"
                       required
                     />
                     <label class="form-check-label" for="form-gender-prefer-not-to-inform">
@@ -131,6 +139,7 @@
                   type="password"
                   class="form-control"
                   id="form-floating-password"
+                  name="password"
                   placeholder="********"
                   pattern="(?=^.{3,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Za-z]).*$"
                   required

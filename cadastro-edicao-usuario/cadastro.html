@@ -25,8 +25,21 @@
 
             <form id="form" class="d-flex flex-column text-start mt-3" novalidate>
               <div class="d-flex justify-content-center mb-3">
-                <input class="d-none" type="file" id="form-profile-picture" required />
+                <input
+                  class="d-none"
+                  accept="image/*"
+                  type="file"
+                  id="form-profile-picture"
+                  name="form-profile-picture"
+                  required
+                />
                 <label for="form-profile-picture" class="d-block profile-picture-label">
+                  <img
+                    class="profile-picture-img"
+                    id="form-profile-picture-img"
+                    src=""
+                    alt="Foto de perfil"
+                  />
                   <span class="profile-picture-icon">Selecione uma foto de perfil</span>
                 </label>
               </div>

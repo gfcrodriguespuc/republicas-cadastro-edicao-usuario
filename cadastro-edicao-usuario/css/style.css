@@ -29,6 +29,10 @@
 }
 
 /* Icone da foto de perfil */
+.profile-picture-label {
+  cursor: pointer;
+}
+
 .profile-picture-label .profile-picture-icon {
   display: flex;
   background: #c4c4c4;
@@ -47,4 +51,26 @@
 form.was-validated input[type="file"]:invalid + .profile-picture-label .profile-picture-icon {
   background: #dc354680;
   border: thin solid #dc3545;
+}
+
+form.was-validated input[type="file"]:valid + .profile-picture-label .profile-picture-img {
+  border-color: #198754;
+}
+
+.profile-picture-label .profile-picture-img {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: thin solid #ced4da;
+}
+
+/* Se não haver src não mostra a imagem */
+.profile-picture-label .profile-picture-img[src=""] {
+  display: none;
+}
+
+/* Se haver src mostra a imagem e oculta o icone*/
+.profile-picture-label .profile-picture-img:not([src=""]) + .profile-picture-icon {
+  display: none;
 }
